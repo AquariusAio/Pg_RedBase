@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PF\headfile\pf_pagehandle.cpp">
+      <Filter>源文件\PF</Filter>
+    </ClCompile>
+    <ClCompile Include="PF\headfile\pf_buffer.cpp" />
+    <ClCompile Include="PF\headfile\pf_filehandle.cpp" />
+    <ClCompile Include="PF\headfile\pf_operator.cpp" />
+    <ClCompile Include="PF\headfile\util.cpp" />
+    <ClCompile Include="PF\headfile\pf_hashtable.cpp" />
+    <ClCompile Include="PF\headfile\noncopyable.h" />
+    <ClCompile Include="RM\rm_filehandle.cpp" />
+    <ClCompile Include="RM\rm_pagehandle.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{ea3b1d89-d6f7-4832-810b-d9837aa2f223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{60cf0a5a-0502-4af7-b5f0-4b78fdf9cdab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\PF">
+      <UniqueIdentifier>{9aa6835c-e895-48dc-bb1f-8fc419a1874b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\PF\PfComponent">
+      <UniqueIdentifier>{6a2a1239-9f31-4a45-8979-ed0d7c91a0c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RM">
+      <UniqueIdentifier>{2562c80e-7762-42fd-926b-2318a2662c06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\PF\PfDefine">
+      <UniqueIdentifier>{fff603d3-1260-4715-a9ee-6a5d3da7b6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\GlobalFun">
+      <UniqueIdentifier>{36d82e92-dc51-4dee-9e29-cc16a1183ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\PF">
+      <UniqueIdentifier>{a406e860-e200-40b8-9c19-0c719cc8f65e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\PM">
+      <UniqueIdentifier>{a6a6f2a0-0e71-43a5-b968-3c424e34e27a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\GlobalFun">
+      <UniqueIdentifier>{a4354fc5-1be9-4e59-8368-75ba634e22f8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PF\headfile\pf_buffer.h" />
+    <ClInclude Include="PF\headfile\pf_pagehandle.h" />
+    <ClInclude Include="PF\headfile\pf_filehandle.h" />
+    <ClInclude Include="PF\headfile\pf_pageheader.h" />
+    <ClInclude Include="PF\headfile\pf_operator.h" />
+    <ClInclude Include="PF\headfile\util.h" />
+    <ClInclude Include="PF\headfile\pf_error.h" />
+    <ClInclude Include="PF\headfile\header.h" />
+    <ClInclude Include="PF\headfile\pf_hashtable.h" />
+    <ClInclude Include="RM\rm_filehandle.h" />
+    <ClInclude Include="RM\rm_pagehandle.h" />
+    <ClInclude Include="PF\headfile\data_dictionary.h" />
+  </ItemGroup>
+</Project>
