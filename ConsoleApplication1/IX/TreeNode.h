@@ -4,12 +4,14 @@
 #include "../PF/headfile/pf_pagehandle.h"
 #include "../PF/headfile/data_dictionary.h"
 #include "RcdRid.h"
-#include "IXheader.h"
+#include "IX_Header.h"
+#include"IX_Comp.h"
 #include <string.h>
-class Comp;
+
 class TreeNode{
 private:
-	PfPageHdl page;       //B树存储块操作指针
+	PfPageHdl page;        //B树存储块操作指针
+	IXComp comp;	       //B树的比较算子
 	
 	Page left, right;      //B树结点的左右结点
 	bool isRoot;           //判断是否为B树根节点
@@ -25,9 +27,5 @@ public:
 	Rid getRid(int);
 	int nodeSearch(void* key);
 	bool nodeInsert(void* key, int pos);
-
 }
 
-class Comp {
-
-};

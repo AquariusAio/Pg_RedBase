@@ -4,6 +4,9 @@ TreeNode::TrreNode(PfPageHdl pagehdl, AttrType type,int capacity):
 	keyType(type)
 {
 	this->page = pagehdl;
+	this->keyType = type;
+	this->comp = IXCompFactory::generateComp(type);
+
 	PageBuffer ptr=page->getPageBuffer();
 	unsigned nodetype;
 
@@ -37,9 +40,12 @@ int TreeNode::nodeSearch(void* key) {
 	int low = 0, high = keyused;
 	while (high >= low) {
 		int mid = (high + low) / 2 ;
-		if (keys_[mid] == key) return mid;
-		else if (keys_[mid] > key) high = mid;
-		else low = mid;
+		switch (comp(keys_[mid], key)) 
+		{
+		case 0:return 0; break;
+		case 1:high = mid; break;
+		case -1:low = mid; break;
+		}
 	}
 
 	if (low == 0) return -1;

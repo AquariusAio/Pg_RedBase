@@ -75,7 +75,9 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="IX\IX_Handle.cpp" />
     <ClCompile Include="IX\TreeNode.cpp" />
+    <ClCompile Include="IX\IX_Comp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PF\headfile\noncopyable.h" />
     <ClCompile Include="PF\headfile\pf_buffer.cpp" />
@@ -88,9 +90,11 @@
     <ClCompile Include="RM\rm_pagehandle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IX\IXheader.h" />
+    <ClInclude Include="IX\IX_Handle.h" />
+    <ClInclude Include="IX\IX_Header.h" />
     <ClInclude Include="IX\RcdRid.h" />
     <ClInclude Include="IX\TreeNode.h" />
+    <ClInclude Include="IX\IX_Comp.h" />
     <ClInclude Include="PF\headfile\data_dictionary.h" />
     <ClInclude Include="PF\headfile\header.h" />
     <ClInclude Include="PF\headfile\pf_buffer.h" />
