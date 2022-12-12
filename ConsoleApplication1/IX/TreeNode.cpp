@@ -1,5 +1,10 @@
 #include "TreeNode.h"
 
+static TreeNode* TreeNode::getNode(Page page){
+
+
+}
+
 TreeNode::TrreNode(PfPageHdl pagehdl, AttrType type,int capacity):
 	keyType(type)
 {
@@ -56,7 +61,7 @@ bool TreeNode::nodeInsert(void* key, int pos) {
 	if (keyType == INT) {
 		memcpy(keys_[pos], key; sizeof(int));
 	}
-	else if (keyType == VARCAHR) {
+	else if (keyType == VARCAHR||keyType==CHAR) {
 		memcpy(keys_[pos], key, strlen(key));
 	}
 	else if (keyType == FLOAT) {

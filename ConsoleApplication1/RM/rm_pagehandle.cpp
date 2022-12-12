@@ -56,3 +56,35 @@ void RmPageHandle::printPage(PfPageHandle& page) {
 		memcpy(&linp, linpPtr, sizeof(ItemIdData));//linp÷∏’Î∫Û“∆
 	}
 }
+
+int RmPageHandle::isValid(PfPageHandle& page, PageSlot slot) {
+
+	PageBuffer linpPtr = page.getLinpBuffer();
+	ItemIdData linp;
+	long offset = slot * sizeof(ItemIdData);
+
+	memcpy(&linp, linpPtr+offset, sizeof(ItemIdData));
+	if (linp.lp_flags == LP_NORMAL) return 1;
+	return 0;
+}
+
+unsigned RmPageHandle::getOffset(PfPageHandle& page, PageSlot slot) {
+
+	PageBuffer linpPtr = page.getLinpBuffer();
+	ItemIdData linp;
+	long offset = slot * sizeof(ItemIdData);
+
+	memcpy(&linp, linpPtr + offset, sizeof(ItemIdData));
+	return linp.lp_off;
+}
+
+/*
+while (linp.lp_flags != LP_NORMAL) {
+		offset += sizeof(ItemIdData);
+		if (page.head_.pd_lower == offset) return -1;
+		linpPtr = linpPtr + sizeof(ItemIdData);
+		memcpy(&linp, linpPtr, sizeof(ItemIdData));
+
+
+	}
+*/

@@ -16,6 +16,8 @@
     <ClCompile Include="IX\TreeNode.cpp" />
     <ClCompile Include="IX\IX_Handle.cpp" />
     <ClCompile Include="IX\IX_Comp.cpp" />
+    <ClCompile Include="IX\IX_operator.cpp" />
+    <ClCompile Include="RM\rm_filescan.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="头文件">
@@ -67,5 +69,8 @@
     <ClInclude Include="IX\IX_Header.h" />
     <ClInclude Include="IX\IX_Handle.h" />
     <ClInclude Include="IX\IX_Comp.h" />
+    <ClInclude Include="IX\IX_operator.h" />
+    <ClInclude Include="RM\rm_rcdrid.h" />
+    <ClInclude Include="RM\rm_filescan.h" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,8 @@ public:
 	~Rid() {};
 	Page getPage() { return num; }
 	PageSlot getSlot() { return slot; }
+	void setPage(Page page) { num = page; }
+	void setSlot(PageSlot pageslot) { slot = pageslot; }
 };
 
 #define RID_LEN sizeof(Rid)

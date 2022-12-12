@@ -49,15 +49,34 @@ void RmFileHandle::insertEndProcess(PfPageHandle& page,unsigned rcdlen) {
 }
 
 
-int RmFileHandle::closeFile() {
 
-	pffile_->fileWriteBack();
-	return 0;
+int RmFileHandle::getRcd(Rid & rid, RmRid & rmRid) {
+
+	Page num = rid.getPage();
+	PageSlot slot = rid.getSlot();
+	PfPageHandle page;
+	RmPageHandle pageHdl;
+
+	pffile_->getPage(num, page);
+	if (!pageHdl.isValid(page, slot)) return 0;//slot并不处于使用状态
+
+	PageBuffer dataptr = page.getInsertBuffer()+pageHdl.getOffset(page,slot);
+	rmRid.setBuffer(dataptr);
+
+	return 1;
 }
+
 
 int RmFileHandle::catFile(Page num) {
 
 	PfPageHandle page;
 	pffile_->getPage(num,page);
 	pagehandle->printPage(page);
+}
+
+
+int RmFileHandle::closeFile() {
+
+	pffile_->fileWriteBack();
+	return 0;
 }

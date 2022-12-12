@@ -1,5 +1,6 @@
 #pragma once
 #include"../PF/headfile/header.h"
+#include"../PF/headfile/data_dictionary.h"
 class IXComp {
 public:
 	virtual int opreate(void* l, void* r)=0;

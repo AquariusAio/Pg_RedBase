@@ -1,6 +1,8 @@
 #pragma once
 #include "../PF/headfile/pf_filehandle.h"
 #include "../PF/headfile/pf_pagehandle.h"
+#include"rm_rcdrid.h"
+#include "../IX/RcdRid.h"
 #include"rm_pagehandle.h"
 struct RmFileDatainfo {
 	int next;//链表下一页的序号
@@ -15,6 +17,7 @@ public:
 	~RmFileHandle();
 
 public:
+	int getRcd(Rid &rid,RmRid&rmRid);
 	int insertRcord( char*);                        //插入一个记录
 	int closeFile();                          //关闭文件
 	int catFile(Page num);

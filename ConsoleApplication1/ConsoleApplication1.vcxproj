@@ -76,6 +76,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="IX\IX_Handle.cpp" />
+    <ClCompile Include="IX\IX_operator.cpp" />
     <ClCompile Include="IX\TreeNode.cpp" />
     <ClCompile Include="IX\IX_Comp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -87,11 +88,13 @@
     <ClCompile Include="PF\headfile\pf_pagehandle.cpp" />
     <ClCompile Include="PF\headfile\util.cpp" />
     <ClCompile Include="RM\rm_filehandle.cpp" />
+    <ClCompile Include="RM\rm_filescan.cpp" />
     <ClCompile Include="RM\rm_pagehandle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IX\IX_Handle.h" />
     <ClInclude Include="IX\IX_Header.h" />
+    <ClInclude Include="IX\IX_operator.h" />
     <ClInclude Include="IX\RcdRid.h" />
     <ClInclude Include="IX\TreeNode.h" />
     <ClInclude Include="IX\IX_Comp.h" />
@@ -105,8 +108,10 @@
     <ClInclude Include="PF\headfile\pf_pageheader.h" />
     <ClInclude Include="PF\headfile\pf_operator.h" />
     <ClInclude Include="PF\headfile\util.h" />
+    <ClInclude Include="RM\rm_filescan.h" />
     <ClInclude Include="RM\rm_filehandle.h" />
     <ClInclude Include="RM\rm_pagehandle.h" />
+    <ClInclude Include="RM\rm_rcdrid.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
