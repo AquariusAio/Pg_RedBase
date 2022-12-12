@@ -17,7 +17,9 @@ private:
 	bool isRoot;            //判断是否为B树根节点
 	bool isLeaf;            //判断是否为B树的叶结点
 	AttrType keyType;       //结点值的类型
-	int keyused;            //键的数量
+public:
+	int capacity_;          //键的容量
+	int keyused_;            //键的数量
 
 	char* keys_;             //B树结点的key值
 	Rid* rids_;              //B树一个结点内的所有键值
@@ -26,7 +28,6 @@ public:
 	Rid getRid(int);
 	int nodeSearch(void* key);
 	bool nodeInsert(void* key, int pos);
-	static TreeNode* getNode(Page page);
 }
 typedef  TreeNodePtr TreeNode*;
 

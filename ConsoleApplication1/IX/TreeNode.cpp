@@ -1,9 +1,5 @@
 #include "TreeNode.h"
 
-static TreeNode* TreeNode::getNode(Page page){
-
-
-}
 
 TreeNode::TrreNode(PfPageHdl pagehdl, AttrType type,int capacity):
 	keyType(type)
@@ -22,7 +18,7 @@ TreeNode::TrreNode(PfPageHdl pagehdl, AttrType type,int capacity):
 	ptr = ptr + sizeof(Page);
 	memcpy(this->right, ptr, sizeof(Page));
 	ptr = ptr + sizeof(Page);
-	memcpy(this->keyused, ptr, sizeof(int));
+	memcpy(this->keyused_, ptr, sizeof(int));
 
 	keys_ = ptr;
 	rids_ = (Rid)(ptr + RID_LEN * capacity);
@@ -37,12 +33,12 @@ TreeNode::TrreNode(PfPageHdl pagehdl, AttrType type,int capacity):
 
 Rid TreeNode::getRid(int pos) {
 
-	if (pos > this->keyused) printf("RID³¬³ö·¶Î§");
+	if (pos > this->keyused_) printf("RID³¬³ö·¶Î§");
 	return rids_[pos];
 }
 
 int TreeNode::nodeSearch(void* key) {
-	int low = 0, high = keyused;
+	int low = 0, high = keyused_;
 	while (high >= low) {
 		int mid = (high + low) / 2 ;
 		switch (comp(keys_[mid], key)) 
@@ -54,7 +50,7 @@ int TreeNode::nodeSearch(void* key) {
 	}
 
 	if (low == 0) return -1;
-	else if (high == keyused) return keyused + 1;
+	else if (high == keyused_) return keyused_ + 1;
 }
 
 bool TreeNode::nodeInsert(void* key, int pos) {
@@ -67,7 +63,7 @@ bool TreeNode::nodeInsert(void* key, int pos) {
 	else if (keyType == FLOAT) {
 		memcpy(keys_[pos], key, sizeof(float));
 	}
-	keyused += 1;
+	keyused_ += 1;
 	return true;
 }
 
