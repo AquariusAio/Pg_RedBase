@@ -76,6 +76,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="IX\IX_Handle.cpp" />
+    <ClCompile Include="IX\IX_manager.cpp" />
     <ClCompile Include="IX\IX_operator.cpp" />
     <ClCompile Include="IX\TreeNode.cpp" />
     <ClCompile Include="IX\IX_Comp.cpp" />
@@ -94,6 +95,7 @@
   <ItemGroup>
     <ClInclude Include="IX\IX_Handle.h" />
     <ClInclude Include="IX\IX_Header.h" />
+    <ClInclude Include="IX\IX_manager.h" />
     <ClInclude Include="IX\IX_operator.h" />
     <ClInclude Include="IX\RcdRid.h" />
     <ClInclude Include="IX\TreeNode.h" />

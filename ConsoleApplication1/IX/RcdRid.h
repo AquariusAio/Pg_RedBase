@@ -12,6 +12,7 @@ public:
 	PageSlot getSlot() { return slot; }
 	void setPage(Page page) { num = page; }
 	void setSlot(PageSlot pageslot) { slot = pageslot; }
+	bool ridEqual(Rid& rid) { if ((rid.getPage() == num) && (rid.getSlot() == slot)) return true;return false; }
 };
 
 #define RID_LEN sizeof(Rid)

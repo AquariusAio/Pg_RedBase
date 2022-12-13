@@ -5,7 +5,7 @@
 #include"TreeNode.h"
 #include "IX_Header.h"
 
-typedef keyPtr void*;
+
 #define NODE_CAPACITY 200;
 class IXHandle{
 
@@ -18,6 +18,6 @@ public:
 	IXHandle(PfFileHandle file,Attributes attr);
 	bool insertIndex(keyPtr,Rid rid);
 private:
-	void insertIndex(TreeNodePtr, int, keyPtr, Rid &);
+	void insertIndex(TreeNodePtr, int, keyPtr, Rid &, bool&);
 	TreeNode getNode(Page page);
 };
