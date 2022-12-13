@@ -13,7 +13,7 @@ struct BtreeFileHeader {
 
 	Page root, leaf;     //B+树的根和首个叶子结点
 	int capacity;        //每一页内记录的容量
-	int keylen;          //每一个键的长度
+	
 };
 
 
@@ -25,6 +25,7 @@ struct BtreeNodeheader
 	unsigned type;      //结点页的类型
 	Page left, right;   //左右子页的指针
 	int keyused;        //记录的数量
+	int keylen;          //每一个键的长度
 };
 
 

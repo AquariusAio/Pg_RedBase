@@ -8,14 +8,15 @@ int RmFileScan::getNextRcd(RmRid& rid) {
 
 	
 	for (;curr_.getPage()<num;curr_.setPage(curr_.getPage()+1)) {
-
-		while (true) {
+		bool contro = true;
+		while (contro) {
 			switch (file_->(getRcd(curr_,rid)))
 			{
-			case -1:break; break;						//需要换页
-			case 1:rid.buffer_+=offset_; return 1;		//记录执政加上内部偏移
+			case -1:contro = false; curr_.setSlot(-1); break;	//下一页从头扫描					//需要换页
+			case 1:rid.rid_.setPage(curr_.getPage()); rid.rid_.setSlot(curr_.getSlot()); rid.buffer_ =offset_; return 1;		//记录执政加上内部偏移
 			case 0:continue; break;                     //当前slot并未使用
 			}
+			curr_.setSlot(curr_.getSlot() + 1);
 		}
 		
 	}
