@@ -18,6 +18,7 @@
     <ClCompile Include="IX\IX_Comp.cpp" />
     <ClCompile Include="IX\IX_operator.cpp" />
     <ClCompile Include="RM\rm_filescan.cpp" />
+    <ClCompile Include="IX\IX_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="头文件">
@@ -72,5 +73,6 @@
     <ClInclude Include="IX\IX_operator.h" />
     <ClInclude Include="RM\rm_rcdrid.h" />
     <ClInclude Include="RM\rm_filescan.h" />
+    <ClInclude Include="IX\IX_manager.h" />
   </ItemGroup>
 </Project>
