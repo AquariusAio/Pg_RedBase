@@ -24,7 +24,7 @@ int CreateFile(const char *filename ) {
 
 	PfFileHdr fileHead=(PfFileHdr)fileHdr;
 	fileHead->freePage = 1;
-	fileHead->foolPage = -1;
+	fileHead->foolPage =-1;
 	fileHead->pageNum = PF_MEM_BLOCKS;
 
 	int n = Write(fd, fileHead, sizeof(PfFileHeader));
@@ -48,16 +48,16 @@ void PageIni(const char* filename,int fd) {
 	RmFileDataPtr headData = (RmFileDataPtr)headPage;
 
 	for (int i = 0; i < PF_MEM_BLOCKS; i++) {
-		headData[i].next = i + 1;
-		printf("%d", headData[i].next);
+		headData[i].next = i+1;
+		printf("PageIni %d\n", headData[i].next);
 	}
 	Write(fd,headData, PF_PAGE_SIZE);
 
 	/*信息页初始化*/
 	PfPageHdrPtr ptr = new PfPageHdr();
 	ItemIdData itemData[PF_LINP_NUM];
-	char blankFill[PF_PAGE_SIZE - sizeof(PfPageHdr) - sizeof(itemData)];
-	memset(blankFill, -1, PF_PAGE_SIZE - sizeof(PfPageHdr) - sizeof(itemData));
+	char blankFill[PF_PAGE_SIZE - sizeof(PfPageHdr) - PF_LINP_LEN];
+	memset(blankFill, -1, PF_PAGE_SIZE - sizeof(PfPageHdr) - PF_LINP_LEN);
 
 	for (int i = 1; i < PF_MEM_BLOCKS; i++) {
 		Write(fd, ptr, sizeof(PfPageHdr));
@@ -69,5 +69,5 @@ void PageIni(const char* filename,int fd) {
 }
 
 void CloseFile(RmFileHdl& rmfile) {
-
+	rmfile->closeFile();
 }

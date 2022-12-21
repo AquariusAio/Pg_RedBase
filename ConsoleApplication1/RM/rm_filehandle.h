@@ -4,10 +4,7 @@
 #include"rm_rcdrid.h"
 #include "../IX/RcdRid.h"
 #include"rm_pagehandle.h"
-struct RmFileDatainfo {
-	int next;//链表下一页的序号
-};
-typedef RmFileDatainfo* RmFileDataPtr;
+
 
 
 class RmFileHandle {

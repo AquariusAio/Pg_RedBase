@@ -4,13 +4,13 @@
 #include"pf_error.h"
 
 #define PF_PAGE_SIZE  4096
-#define PF_MEM_BLOCKS 20
-#define PF_LINP_NUM 64
+#define PF_MEM_BLOCKS 30
+#define PF_LINP_NUM 210
 
 
 typedef int Page;
 typedef char* PageBuffer;
-typedef unsigned PageSlot;
+typedef int PageSlot;
 typedef unsigned int uint;
 typedef int Page;
 typedef int RC;

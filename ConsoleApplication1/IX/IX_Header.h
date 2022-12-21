@@ -13,6 +13,7 @@ struct BtreeFileHeader {
 
 	Page root, leaf;     //B+树的根和首个叶子结点
 	int capacity;        //每一页内记录的容量
+	int keylen;
 	
 };
 

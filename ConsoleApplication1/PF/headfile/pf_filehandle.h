@@ -6,7 +6,13 @@
 #include "pf_pagehandle.h"
 #include "pf_pageheader.h"
 
+
 using namespace std;
+//----------------------文件第一页信息结构---------------------------
+struct RmFileDatainfo {
+	int next;//链表下一页的序号
+};
+typedef RmFileDatainfo* RmFileDataPtr;
 
 //----------------------文件头部信息结构---------------------------
 struct PfFileHeader {
@@ -20,7 +26,7 @@ typedef PfFileHeader* PfFileHdr;
 
 //----------------------文件控制句柄-------------------------------
 
-class PfFileHandle :public noncopyable
+class PfFileHandle 
 {
 public:
 	PfFileHandle() { fileHeadInfo = new PfFileHeader(); };
@@ -35,6 +41,7 @@ public:
 	void unpin();
 	void makeDirty();
 	void fileWriteBack();
+	void setfull(Page);
 public:
 	PfFileHdr fileHeadInfo;        //文件头部信息
 	int fd_;                       //文件描述符

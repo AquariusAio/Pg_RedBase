@@ -1,4 +1,5 @@
 #include "rm_filehandle.h"
+#include<iostream>
 extern PfBuffer pfBuffer;
 RmFileHandle::RmFileHandle(PfFileHdl file) {
 	this->pffile_ = file;
@@ -16,9 +17,9 @@ int RmFileHandle::insertRcord( char* record) {
 	freePagehandle(page);//分配一个页面
 	offset = nextSlot(page);//获取插入位置偏移量，也即slot
 	PageBuffer pageptr = page.getInsertBuffer()+offset;//获得插入位置指针
-	memcpy(pageptr, record, sizeof(record));//插入记录
+	memcpy(pageptr, record, strlen(record));//插入记录
 
-	insertEndProcess(page, sizeof(record));//后处理
+	insertEndProcess(page, strlen(record));//后处理
 	return 0;
 }
 
@@ -44,8 +45,14 @@ unsigned RmFileHandle::nextSlot(PfPageHandle& page) {
 
 void RmFileHandle::insertEndProcess(PfPageHandle& page,unsigned rcdlen) {
 
-	pagehandle->setUsed(page, rcdlen);
+	int full = pagehandle->setUsed(page, rcdlen);
 	page.setDirty();
+	//页满
+	if (full) {
+		pffile_->setfull(pffile_->fileHeadInfo->freePage);
+		std::cout<<"ALLOCTE NEW FREE PAGE "<<pffile_->fileHeadInfo->freePage<<endl;
+	}
+	
 }
 
 

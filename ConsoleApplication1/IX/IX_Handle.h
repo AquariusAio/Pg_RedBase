@@ -11,14 +11,16 @@ class IXHandle{
 
 public:
 	BtreeFileHeader head_;
-	PfFileHandle file_;
+	PfFileHdl file_;
 	TreeNodePtr root_;
 	Attributes attr_;
 public:
-	IXHandle(PfFileHandle file,Attributes attr);
+	IXHandle(PfFileHdl file,Attributes attr);
 	bool createIndex(Attributes);
 	bool insertIndex(keyPtr,Rid rid);
 private:
-	void insertIndex(TreeNodePtr, int, keyPtr, Rid &, bool&);
-	TreeNode getNode(Page page);
+	bool insertIndex(TreeNodePtr, int, keyPtr, Rid &, bool&);
+	TreeNode* getNode(Page page);
+	TreeNode* newTreeNode();
+	void NodeDevide(TreeNodePtr,TreeNodePtr);
 };

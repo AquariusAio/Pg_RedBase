@@ -108,6 +108,14 @@ RC PfBuffer::writeBack(int fd, Page num, PageBuffer src)
 	return 0;
 }
 
+void PfBuffer::writeBackPage(int fd,Page num) {
+
+	int idx = table_.search(fd, num);
+	if (idx >= 0&&nodes_[idx].fd==fd) {
+		writeBack(nodes_[idx].fd, nodes_[idx].num, nodes_[idx].buffer);
+	}
+}
+
 PageBuffer PfBuffer::getPage(int fd, Page num) {
 
 	int idx = table_.search(fd, num);
@@ -135,7 +143,8 @@ int PfBuffer::closeFile(int fd) {
 	for (int i = 0; i < PF_MEM_BLOCKS; i++) {
 		if (nodes_[i].fd == fd) {
 			writeBack(nodes_[i].fd, nodes_[i].num, nodes_[i].buffer);
-			table_.remove(fd,nodes_[i].num);
+			nodes_[i].dirty = false;
+			//table_.remove(fd,nodes_[i].num);
 		}
 	}
 	return 0;

@@ -13,7 +13,7 @@ int PfHashTable::search(int fd, Page num)
 	//if (table_.empty()) return -1;
 	int key = calcHash(fd, num);
 	if (key < 0) return -1;
-	vector<Triple>::const_iterator it;
+	vector<Triple>::iterator it;
 	for (it = table_.begin(); it != table_.end(); it++) {
 		if ((it->fd == fd) && (it->num == num))
 			return it->slot;
