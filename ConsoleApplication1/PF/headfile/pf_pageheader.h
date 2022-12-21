@@ -43,7 +43,7 @@ public:
 	LocationIndex pd_special;   /* offset to start of special space */
 	//ItemIdData pb_linp[];
 public:
-	PfPageHdr() :pd_lower(0), pd_upper(51), pd_special(0) {}
+	PfPageHdr() :pd_lower(0), pd_upper(800), pd_special(0) {}
 };
 typedef PfPageHdr* PfPageHdrPtr;
 

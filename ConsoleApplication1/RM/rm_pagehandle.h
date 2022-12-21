@@ -10,7 +10,7 @@ public:
 	~RmPageHandle() {};
 public:
 	unsigned nextSlot(PfPageHandle& page);
-	void setUsed(PfPageHandle&, unsigned);                   //将某linp状态设为使用  
+	int setUsed(PfPageHandle&, unsigned);                   //将某linp状态设为使用  
 	void printPage(PfPageHandle& page);                      
 	int isValid(PfPageHandle& page,PageSlot slot);           //判断位置的状态
 	unsigned getOffset(PfPageHandle& page, PageSlot slot);   //获得记录的记录偏移

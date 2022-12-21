@@ -1,32 +1,36 @@
 #include"IX_operator.h"
-
+#include<stdio.h>
 void CreateIndex(const char* relname, const char* attrname) {
 	
 	Attributes attr;
-	attr.attrname = account;
+	memcpy(attr.attrname, attrname, 7);
 	attr.attrlen = 4;
 	attr.flexible = false;
-	attr.offset = 10;
+	attr.offset = 0;
 	memcpy(attr.rename, "account", 7);
 	attr.type = INT;
 
-	CreateFile(relname);
-	RmFileHandle indexfile;
-	OpenFile(relname, indexfile);
-	RmFileScan scan(indexfile,attr,offset);
+	char indexname[20];
+	sprintf(indexname, "%s%d", relname, attr.offset);
+	CreateFile(indexname);
+	RmFileHdl indexfile, rcdfile;
+	OpenFile(indexname, indexfile);
+	OpenFile(relname, rcdfile);
 
-	IX::CreateIndex(indexfile.pffile_, scan, attr);
+	RmFileScan scan(rcdfile,attr.offset);
+	IX::CreateIndex(indexfile->pffile_, scan, attr);
 }
 
 namespace IX {
-	void CreateIndex(PfFileHandle& file ,RmFileScan &scan, Attributes attr) {
-		
-		RmRid rid(new Rid(1, -1), attr.offset);
-		IXHandle ix;
-		ix.createIndex(file);
+	void CreateIndex(PfFileHdl file ,RmFileScan &scan, Attributes attr) {
+		Rid rid_(1, -1);
+		RmRid rid(rid_, attr.attrlen);
+		IXHandle ix(file,attr,false);
+		ix.createIndex(attr);
 
 		while (scan.getNextRcd(rid)) {
 			ix.insertIndex(rid.buffer_, rid.rid_);
 		}
+		printf("insert enf");
 	}
 }

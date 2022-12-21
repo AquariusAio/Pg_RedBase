@@ -10,11 +10,12 @@ unsigned RmPageHandle::nextSlot(PfPageHandle& page) {
 	while (linp.lp_flags == LP_NORMAL) {
 		memcpy( &linp, ptr, sizeof(ItemIdData));
 		page.head_.pd_lower += sizeof(ItemIdData);
+		ptr += sizeof(ItemIdData);
 	}
 	return linp.lp_off;
 }
 
-void RmPageHandle::setUsed(PfPageHandle& page,unsigned rcdlen) {
+int RmPageHandle::setUsed(PfPageHandle& page,unsigned rcdlen) {
 
 	LocationIndex offset = page.head_.pd_lower;
 	PageBuffer ptr = page.getLinpBuffer() + offset;
@@ -29,9 +30,12 @@ void RmPageHandle::setUsed(PfPageHandle& page,unsigned rcdlen) {
 	page.head_.pd_lower += sizeof(ItemIdData);//tuple偏移量修改
 
 	/*tuple写回*/
+	memcpy(page.getPageBuffer(), &page.head_, sizeof(PfPageHdr));
 	memcpy(ptr, &linp, sizeof(ItemIdData));
 	memcpy(ptr + sizeof(ItemIdData), &nextlinp, sizeof(ItemIdData));
-	return;
+
+	if (page.full()) return 1;
+	return 0;
 }
 
 void RmPageHandle::printPage(PfPageHandle& page) {
@@ -43,13 +47,14 @@ void RmPageHandle::printPage(PfPageHandle& page) {
 	while (linp.lp_flags != LP_UNUSED) {
 		if (linp.lp_flags == LP_NORMAL) {
 			long offset = linp.lp_off;
-			char rcd[linp.lp_len+1];
-			rcd[linp.lp_len] = '/0';//尾部标志
-
+			char rcd[linp.lp_len];
+			rcdPtr = page.getInsertBuffer() + linp.lp_off;
 			memcpy(&rcd, rcdPtr, linp.lp_len);
-			rcdPtr += linp.lp_len;//记录指针后移
-
-			std::cout << rcd << endl;
+			int account;
+			char name[6];
+			memcpy(&account, rcd, sizeof(int));
+			memcpy(name, rcd + sizeof(int), 6);
+			std::cout <<endl<< account <<" "<<name << endl;
 		}
 
 		linpPtr += sizeof(ItemIdData);
