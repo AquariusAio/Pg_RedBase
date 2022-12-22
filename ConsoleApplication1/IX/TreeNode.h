@@ -42,6 +42,7 @@ public:
 	bool insertInternal(void* key, Rid rid, int pos);
 	bool keyUpdate(void* key, int pos);
 	bool ridUpdate(Rid rid, int pos);
+	bool isLeaf() { return isLeaf; }
 	int Comp(keyPtr lkey, keyPtr rkey) { return comp->operate(lkey,rkey); }
 };
 typedef TreeNode* TreeNodePtr;

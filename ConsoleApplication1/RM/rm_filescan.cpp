@@ -4,7 +4,6 @@ int RmFileScan::getNextRcd(RmRid& rid) {
 
 	Page pages = file_->pffile_->fileHeadInfo->pageNum;
 	Page num = curr_.getPage();
-	RmPageHandle pageHdl;
 
 	
 	for (;curr_.getPage()<pages;curr_.setPage(curr_.getPage()+1)) {

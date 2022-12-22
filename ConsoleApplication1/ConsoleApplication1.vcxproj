@@ -75,6 +75,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="IX\IX_filescan.cpp" />
     <ClCompile Include="IX\IX_Handle.cpp" />
     <ClCompile Include="IX\IX_manager.cpp" />
     <ClCompile Include="IX\IX_operator.cpp" />
@@ -93,6 +94,7 @@
     <ClCompile Include="RM\rm_pagehandle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IX\IX_filescan.h" />
     <ClInclude Include="IX\IX_Handle.h" />
     <ClInclude Include="IX\IX_Header.h" />
     <ClInclude Include="IX\IX_manager.h" />
