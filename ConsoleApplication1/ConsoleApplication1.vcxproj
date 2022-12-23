@@ -77,7 +77,6 @@
   <ItemGroup>
     <ClCompile Include="IX\IX_filescan.cpp" />
     <ClCompile Include="IX\IX_Handle.cpp" />
-    <ClCompile Include="IX\IX_manager.cpp" />
     <ClCompile Include="IX\IX_operator.cpp" />
     <ClCompile Include="IX\TreeNode.cpp" />
     <ClCompile Include="IX\IX_Comp.cpp" />
@@ -89,6 +88,10 @@
     <ClCompile Include="PF\headfile\pf_operator.cpp" />
     <ClCompile Include="PF\headfile\pf_pagehandle.cpp" />
     <ClCompile Include="PF\headfile\util.cpp" />
+    <ClCompile Include="QL\qi_token.cpp" />
+    <ClCompile Include="QL\ql_lexer.cpp" />
+    <ClCompile Include="QL\ql_operator.cpp" />
+    <ClCompile Include="QL\ql_syntax.cpp" />
     <ClCompile Include="RM\rm_filehandle.cpp" />
     <ClCompile Include="RM\rm_filescan.cpp" />
     <ClCompile Include="RM\rm_pagehandle.cpp" />
@@ -97,7 +100,6 @@
     <ClInclude Include="IX\IX_filescan.h" />
     <ClInclude Include="IX\IX_Handle.h" />
     <ClInclude Include="IX\IX_Header.h" />
-    <ClInclude Include="IX\IX_manager.h" />
     <ClInclude Include="IX\IX_operator.h" />
     <ClInclude Include="IX\RcdRid.h" />
     <ClInclude Include="IX\TreeNode.h" />
@@ -112,6 +114,11 @@
     <ClInclude Include="PF\headfile\pf_pageheader.h" />
     <ClInclude Include="PF\headfile\pf_operator.h" />
     <ClInclude Include="PF\headfile\util.h" />
+    <ClInclude Include="QL\ql_head.h" />
+    <ClInclude Include="QL\ql_lexer.h" />
+    <ClInclude Include="QL\ql_operator.h" />
+    <ClInclude Include="QL\ql_syntax.h" />
+    <ClInclude Include="QL\ql_token.h" />
     <ClInclude Include="RM\rm_filescan.h" />
     <ClInclude Include="RM\rm_filehandle.h" />
     <ClInclude Include="RM\rm_pagehandle.h" />

@@ -5,23 +5,24 @@
 #include "PF/headfile/pf_buffer.h"
 #include "PF/headfile/header.h"
 #include "IX/IX_operator.h"
+#include "QL/ql_operator.h"
 #include <iostream>
 #include <cstdlib>
 #include<math.h>
 using namespace std;
 PfBuffer* pfBuffer = PfBuffer::instance();
+
+
 int main()
 {
 
     printf("%s 向你问好!\n", "ConsoleApplication1");
-    //实验2测试代码
-    IXFileScan scan;
-    IX::OpenIndex("account", scan);
-    scan.getLeafNode();
+    QL::Parse();
     return 0;
 }
 
 /*
+*   //实验1测试代码
     RmFileHdl file;
     CreateFile("account");
     OpenFile("account", file);
