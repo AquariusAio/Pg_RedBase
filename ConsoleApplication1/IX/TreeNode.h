@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../PF/headfile/pf_filehandle.h"
-#include "../PF/headfile/pf_pagehandle.h"
-#include "../PF/headfile/data_dictionary.h"
+#include "../PF/headfile/headfile/pf_filehandle.h"
+#include "../PF/headfile/headfile/pf_pagehandle.h"
+#include "../PF/headfile/headfile/data_dictionary.h"
 #include "RcdRid.h"
 #include "IX_Header.h"
 #include"IX_Comp.h"
@@ -11,7 +11,7 @@
 typedef void* keyPtr;
 
 class TreeNode {
-private:
+protected:
 	PfPageHdl page_;         //B树存储块操作指针
 	IXComp *comp;	        //B树的比较算子
 
@@ -42,7 +42,7 @@ public:
 	bool insertInternal(void* key, Rid rid, int pos);
 	bool keyUpdate(void* key, int pos);
 	bool ridUpdate(Rid rid, int pos);
-	bool isLeaf() { return isLeaf; }
+	bool IsLeaf() { return isLeaf; }
 	int Comp(keyPtr lkey, keyPtr rkey) { return comp->operate(lkey,rkey); }
 };
 typedef TreeNode* TreeNodePtr;

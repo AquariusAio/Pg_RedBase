@@ -8,18 +8,10 @@
 
 using namespace std;
 
-struct BufferBlock {
-	bool dirty;//块标记
-	uint count;//引用计数
-	int fd;//打开文件描述符
-	Page num;//页号
-	char buffer[PF_PAGE_SIZE];//文件内容,大小为2K
-};
-
 class PfBuffer
 {
 private:
-	PfBuffer() {};
+	PfBuffer();
 public:
 	//全局只有一个PfBuffer
 	static PfBuffer* instance()
@@ -32,14 +24,15 @@ public:
 	~PfBuffer() {};
 private:
 	static PfBuffer* instance_;
-	BufferBlock nodes_[PF_MEM_BLOCKS];
-	PfHashTable table_;
+	BufferBlock nodes_[PF_MEM_BLOCKS+2];
+	BufferStrategy table_;
 public:
 	RC allocatePage(int fd, Page num, PageBuffer& addr);//从node_中分配一块区域
 	PageBuffer getPage(int fd, Page num);//从node_找到某个页，返回这个页的存储指针
 	RC pin(int fd, Page num);//将块钉在内存中
 	RC unpin(int fd, Page num);//取消固定，可被写回外存
 	int closeFile(int fd);
+	void countDec(int fd, Page num);
 	void writeBackPage(int,Page num);
 private:
 	RC readPage(int fd, Page num, PageBuffer dst);//将块从外存读入内存

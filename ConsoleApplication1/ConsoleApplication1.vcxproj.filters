@@ -18,7 +18,6 @@
     <ClCompile Include="IX\IX_Comp.cpp" />
     <ClCompile Include="IX\IX_operator.cpp" />
     <ClCompile Include="RM\rm_filescan.cpp" />
-    <ClCompile Include="IX\IX_manager.cpp" />
     <ClCompile Include="IX\IX_filescan.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +51,9 @@
     <Filter Include="头文件\GlobalFun">
       <UniqueIdentifier>{a4354fc5-1be9-4e59-8368-75ba634e22f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{41771f8b-caad-41e4-aa8a-b664f01dad6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PF\headfile\pf_buffer.h" />
@@ -74,7 +76,6 @@
     <ClInclude Include="IX\IX_operator.h" />
     <ClInclude Include="RM\rm_rcdrid.h" />
     <ClInclude Include="RM\rm_filescan.h" />
-    <ClInclude Include="IX\IX_manager.h" />
     <ClInclude Include="IX\IX_filescan.h" />
   </ItemGroup>
 </Project>

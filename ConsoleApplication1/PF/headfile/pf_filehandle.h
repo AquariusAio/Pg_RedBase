@@ -34,7 +34,7 @@ public:
 
 public:
 	void getPage(Page num, PfPageHandle& page);                //按照块到找到对应的块
-	void nextPage();               //找到输入块号下一个空闲块
+	void nextPage();                            //找到输入块号下一个空闲块
 	void allocatePage(PfPageHandle&);           //从文件内分配一个页
 	//PfPageHnadle与PfBuffer通信
 	void pin();

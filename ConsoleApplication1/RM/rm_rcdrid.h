@@ -1,6 +1,6 @@
 #pragma once
 #include "../IX/RcdRid.h"
-#include "../PF/headfile/header.h"
+#include "../PF/headfile/headfile/header.h"
 class RmRid {
 public:
 	RmRid(Rid& rid, int rcdlen) :rid_(rid), buffer_(nullptr), rcdlen_(rcdlen) {};

@@ -1,6 +1,6 @@
 #include "rm_filescan.h"
 
-int RmFileScan::getNextRcd(RmRid& rid) {
+int RmFileScan::getNextRcd(RmRid& rid,PageBuffer ptr) {
 
 	Page pages = file_->pffile_->fileHeadInfo->pageNum;
 	Page num = curr_.getPage();

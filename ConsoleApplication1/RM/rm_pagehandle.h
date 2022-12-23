@@ -1,7 +1,7 @@
 #pragma once
-#include "../PF//headfile/pf_pageheader.h"
-#include "../PF/headfile/pf_buffer.h"
-#include "../PF/headfile/pf_pagehandle.h"
+#include "../PF/headfile//headfile/pf_pageheader.h"
+#include "../PF/headfile/headfile/pf_buffer.h"
+#include "../PF/headfile/headfile/pf_pagehandle.h"
 #include<string.h>
 class RmPageHandle {
 

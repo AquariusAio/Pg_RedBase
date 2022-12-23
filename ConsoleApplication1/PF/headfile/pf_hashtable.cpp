@@ -1,14 +1,22 @@
 #include "pf_hashtable.h"
 #include<list>
-PfHashTable::PfHashTable(uint capacity)
-	: capacity_(capacity)
-{
+
+int LRUStrategy::replace() {
+
+	return table_.begin()->slot;
 }
 
-//
-// search - 在表中搜寻这样的三元组,找到了,返回即可,否则的话,返回-1
-// 三元组包含有 文件描述符-页数-槽
-int PfHashTable::search(int fd, Page num)
+int ClockStrategy::replace() {
+
+	int cont = 0;
+	vector<Triple>::iterator it;
+	for (it=table_.begin()+point; cont<table_.size(); cont++,it++,point=(point+1)%table_.size()) {
+		if (it->count==0)	return it->slot;
+		else  it->count = 0;
+	}
+}
+
+int BufferStrategy::search(int fd, Page num)
 {
 	//if (table_.empty()) return -1;
 	int key = calcHash(fd, num);
@@ -22,10 +30,7 @@ int PfHashTable::search(int fd, Page num)
 }
 
 
-//
-// insert - 往hash表中插入一个元素
-// 
-bool PfHashTable::insert(int fd, Page num, int slot)
+bool BufferStrategy::insert(int fd, Page num, int slot)
 {
 	int key = calcHash(fd, num);
 	if (key < 0) return false;
@@ -39,10 +44,8 @@ bool PfHashTable::insert(int fd, Page num, int slot)
 	return true;
 }
 
-//
-// remove - 从hash表中移除掉一个元素
-// 
-bool PfHashTable::remove(int fd, Page num)
+
+bool BufferStrategy::remove(int fd, Page num)
 {	
 	int key = calcHash(fd, num);	
 	if (key < 0) return false;
