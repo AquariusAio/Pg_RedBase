@@ -40,6 +40,7 @@ public:
 	RC pin(int fd, Page num);//将块钉在内存中
 	RC unpin(int fd, Page num);//取消固定，可被写回外存
 	int closeFile(int fd);
+	void countDec(int fd, Page num);
 	void writeBackPage(int,Page num);
 private:
 	RC readPage(int fd, Page num, PageBuffer dst);//将块从外存读入内存

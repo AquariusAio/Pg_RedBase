@@ -1,5 +1,6 @@
 #include"../RM/rm_rcdrid.h"
 #include"../RM/rm_filehandle.h"
+#include"../PF/headfile/header.h"
 #include"../PF/headfile/data_dictionary.h"
 #include"../PF/headfile/pf_pagehandle.h"
 #include"../PF/headfile/header.h"
@@ -19,9 +20,10 @@ public:
 	void openScan(PfFileHdl file, Attributes attr);
 	int getNextIndex(keyPtr,RmRid&);
 	void getLeafNode();
+	void getInternalNode();
 private:
 	int getNextIndex(keyPtr);
 	int posSearch(keyPtr, TreeNodePtr);
-	TreeNode* getNode(Page num)
+	TreeNode* getNode(Page num);
 };
 

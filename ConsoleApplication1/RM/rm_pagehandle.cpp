@@ -1,6 +1,6 @@
 #include"rm_pagehandle.h"
 #include<iostream>
-
+#include<unistd.h>
 unsigned RmPageHandle::nextSlot(PfPageHandle& page) {
 
 	LocationIndex offset = page.head_.pd_lower;
@@ -22,7 +22,9 @@ int RmPageHandle::setUsed(PfPageHandle& page,unsigned rcdlen) {
 	ItemIdData linp, nextlinp;
 	memcpy(&linp, ptr, sizeof(ItemIdData));
 	memcpy(&nextlinp, ptr + sizeof(ItemIdData), sizeof(ItemIdData));
-
+	if (rcdlen == 1) {
+		printf("\n");
+	}
 	linp.lp_flags = LP_NORMAL;//标志使用
 	linp.lp_len = rcdlen;
 	nextlinp.lp_off = linp.lp_off + rcdlen;
@@ -52,9 +54,12 @@ void RmPageHandle::printPage(PfPageHandle& page) {
 			memcpy(&rcd, rcdPtr, linp.lp_len);
 			int account;
 			char name[6];
+			if (account == -5728) {
+				sleep(10);
+			}
 			memcpy(&account, rcd, sizeof(int));
 			memcpy(name, rcd + sizeof(int), 6);
-			std::cout <<endl<< account <<" "<<name << endl;
+			std::cout << account <<" "<<name << endl;
 		}
 
 		linpPtr += sizeof(ItemIdData);

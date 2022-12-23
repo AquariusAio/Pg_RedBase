@@ -41,6 +41,7 @@ int PfBuffer::searchAvaliableNode()
 	for (int i = 0; i <PF_MEM_BLOCKS; i++) {
 		if (nodes_[i].count == 0) {
 			table_.remove(nodes_[i].fd, nodes_[i].num);
+			if(nodes_[i].fd!=0)writeBack(nodes_[i].fd, nodes_[i].num, nodes_[i].buffer);
 			return i;
 		}
 	}
@@ -106,6 +107,14 @@ RC PfBuffer::writeBack(int fd, Page num, PageBuffer src)
 	int n = Write(fd, src, PF_PAGE_SIZE);
 	if (n != PF_PAGE_SIZE) return PF_INCOMPLETEWRITE;
 	return 0;
+}
+
+void PfBuffer::countDec(int fd, Page num) {
+
+	int idx = table_.search(fd, num);
+	if (idx >= 0 && nodes_[idx].fd == fd) {
+		nodes_[idx].count-=1;
+	}
 }
 
 void PfBuffer::writeBackPage(int fd,Page num) {

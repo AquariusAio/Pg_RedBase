@@ -11,7 +11,7 @@ public:
 	int offset_;
 public:
 	RmFileScan(RmFileHdl file,int offset) :file_(file), offset_(offset),curr_(1, -1) {};
-	int getNextRcd(RmRid&);
+	int getNextRcd(RmRid&,PageBuffer);
 };
 
 #define SCAN_EOF 0;

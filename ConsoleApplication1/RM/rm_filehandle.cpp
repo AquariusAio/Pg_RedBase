@@ -10,6 +10,7 @@ RmFileHandle::RmFileHandle(PfFileHdl file) {
 
 int RmFileHandle::insertRcord( char* record) {
 
+	
 	PfPageHandle page;
 	Page num;
 	PageSlot offset;

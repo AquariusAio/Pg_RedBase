@@ -9,10 +9,10 @@ TreeNode::TreeNode(PfPageHdl pagehdl, AttrType type,int capacity):
 	this->comp = IXCompFactory::generateComp(type);
 
 	PageBuffer ptr=page_->getPageBuffer();
-	unsigned nodetype;
+	AttrType nodetype;
 
 
-	memcpy(&nodetype, ptr, sizeof(unsigned));
+	memcpy(&nodetype, ptr, sizeof(AttrType));
 	ptr = ptr + sizeof(unsigned);
 	memcpy(&(this->left), ptr, sizeof(Page));
 	ptr = ptr + sizeof(Page);
@@ -27,29 +27,33 @@ TreeNode::TreeNode(PfPageHdl pagehdl, AttrType type,int capacity):
 
 	switch (nodetype)
 	{
-	case IS_ROOT:isRoot = true; break;
-	case IS_LEAF:isLeaf = true; break;
-	default:printf("页类型错误"); break;
+	case INT:break;
+	case VARCAHR:break;
+	case CHAR:break;
+	case FLOAT:break;
+	default:printf("页类型错误");
+		break;
 	}
 }
 
 TreeNode::~TreeNode() {
+
 	PageBuffer ptr = page_->getPageBuffer();
+	memcpy(ptr, &keyType, sizeof(AttrType));
 	ptr = ptr + sizeof(unsigned);
 	memcpy( ptr, &(this->left), sizeof(Page));
 	ptr = ptr + sizeof(Page);
 	memcpy( ptr, &(this->right), sizeof(Page));
 	ptr = ptr + sizeof(Page);
 	memcpy( ptr, &(this->keyused_), sizeof(int));
-	delete(page_);
-	printf("Free Page\n");
+	if(page_!=nullptr) delete(page_);
 
 }
 
 Rid* TreeNode::getRid(int pos) {
 
 	if (pos > this->keyused_) printf("RID超出范围");
-	return rids_+pos*sizeof(Rid);
+	return rids_+pos;
 }
 
 keyPtr TreeNode::getKey(int pos) {
@@ -84,7 +88,7 @@ int TreeNode::nodeSearch(void* key) {
 
 	if (low == 0) return Comp(getKey(0), key) > 0 ? -1 : 0;//小于所有的key值
 	else if (low >= keyused_) return keyused_-1;//大于所有的键值
-	return mid - 1;
+	return low - 1;
 }
 
 bool TreeNode::insertLeaf(void* key, Rid rid) {
@@ -97,12 +101,14 @@ bool TreeNode::insertLeaf(void* key, Rid rid) {
 		prev = curr;
 		curr = getKey(i);
 		if (Comp(key, curr) > 0) break;
-		rids_[i + 1] = rids_[i];
-		keyUpdate(curr,i + 1);
+		//rids_[i + 1] = rids_[i];
+		memcpy(getRid(i + 1), getRid(i), sizeof(Rid));
+		memcpy(getKey(i + 1), getKey(i), keylen_);
 	}
-	rids_[i + 1] = rid;
+	//rids_[i + 1] = rid;
+	memcpy(getRid(i + 1), &rid, sizeof(Rid));
 	keyUpdate(key, i + 1);
-	std::cout << "insertinto " << this->page_->getPage() << " "<<this->keyused_<<endl;
+	//std::cout << "insertinto " << this->page_->getPage() << " "<<this->keyused_<<endl;
 	keyused_++;
 	page_->setDirty();
 	return true;
@@ -112,11 +118,14 @@ bool TreeNode::insertInternal(void* key, Rid rid, int pos) {
 
 	if ((pos < 0) || (pos >keyused_)) return false;
 	int count = keyused_ - pos;
+	std::cout << "shuchu" << endl;
+	for (int i = 0; i < keyused_; i++) std::cout << rids_[i].getPage() << rids_[i].getSlot() << endl;
 	memmove(getKey(pos+1), getKey(pos), count * keylen_);
 	memmove(getRid(pos+1), getRid(pos), count * sizeof(Rid));
 	memcpy(getKey(pos), key, keylen_);
 	ridUpdate(rid,pos);
-
+	std::cout << "charujieshu" << endl;
+	for (int i = 0; i < keyused_+1; i++) std::cout << rids_[i].getPage() << rids_[i].getSlot() << endl;
 	keyused_++;
 	page_->setDirty();
 	return true;
@@ -140,6 +149,6 @@ bool TreeNode::keyUpdate(void* key, int pos) {
 
 bool TreeNode::ridUpdate(Rid rid, int pos) {
 
-	memcpy(rids_ + pos * sizeof(Rid), &rid, sizeof(Rid));
+	memcpy(&rids_[pos], &rid, sizeof(Rid));
 	return true;
 }

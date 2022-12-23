@@ -7,23 +7,22 @@
 #include "IX/IX_operator.h"
 #include <iostream>
 #include <cstdlib>
-
+#include<math.h>
 using namespace std;
 PfBuffer* pfBuffer = PfBuffer::instance();
-void fun(RmFileHdl &file) {
-
-}
 int main()
 {
+
     printf("%s 向你问好!\n", "ConsoleApplication1");
-    RmFileHdl file;
-    CreateIndex("account", "account");
-    
+    //实验2测试代码
+    IXFileScan scan;
+    IX::OpenIndex("account", scan);
+    scan.getLeafNode();
     return 0;
 }
 
 /*
-    //实验1测试代码
+    RmFileHdl file;
     CreateFile("account");
     OpenFile("account", file);
     const char* str = "abcdefghijklmnopqrstuvwxyz";
@@ -35,9 +34,8 @@ int main()
             name[j] = str[pos];
         }
         memcpy(rcd, &account, sizeof(int));
-        memcpy(rcd+sizeof(int), name, strlen(name));
-
-        file->insertRcord(rcd);
+        memcpy(rcd + sizeof(int), name, strlen(name));
+        if (strlen(record) >10) file->insertRcord(rcd);
         account += rand() % 10000;
     }
 
@@ -45,4 +43,13 @@ int main()
     file->catFile(25);
     CloseFile(file);
     
+*/
+
+/*
+* 
+    //实验2测试代码
+    CreateIndex("account", "name");
+    IXFileScan scan;
+    IX::OpenIndex("account", scan);
+    scan.getLeafNode();
 */
