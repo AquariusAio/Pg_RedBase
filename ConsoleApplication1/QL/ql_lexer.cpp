@@ -2,6 +2,7 @@
 #include <memory>
 #include <string.h>
 #include <vector>
+#include<set>
 #include "ql_lexer.h"
 #include "ql_token.h"
 using namespace std;

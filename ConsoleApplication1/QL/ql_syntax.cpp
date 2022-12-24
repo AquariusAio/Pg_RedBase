@@ -2,22 +2,48 @@
 
 #include<iostream>
 
+#define MAXNODE 100
 
+static NODE nodepool[MAXNODE];
+static int nodeptr = 0;
 
+//
+// next - 获取下一个token
+// 
+TokenPtr SyntaxTree::next()
+{
+	TokenPtr t;
+	if (tokens_.size() != 0) t = tokens_.front();
+	else return lexer_->next();
+	tokens_.pop_front();
+	return t;
+}
+
+//
+// peek - 向前偷看,因为是在内部使用的函数,所以不会对参数进行检查
+//
+TokenPtr SyntaxTree::peek(int pos)
+{
+	while (tokens_.size() < pos) {
+		TokenPtr t = lexer_->next();
+		if (t == nullptr) return nullptr;
+		tokens_.push_back(t);
+	}
+	return tokens_[pos - 1];
+}
 //
 // buildSyntaxTree - 构建一棵语法树
 //
 NODE* SyntaxTree::buildSyntaxTree()
 {
 	NODE* node = nullptr;
-	bool succ = parseCommand(node);
-	if (!succ) succ = parseUtility(node);
+	bool succ = parseDML(node);
 	if (succ) {
 		TokenPtr ta = next();
 		if (ta->type == RW_SEMICOLON)
 		{
-			return node;
 			std::cout << "SQL语句应以;结尾" << endl;
+			return node;
 		}
 	}
 	std::cout << "DML语句解析失败" << endl;
@@ -43,7 +69,6 @@ void SyntaxTree::discard(int num)
 bool SyntaxTree::parseDML(NODE*& node)
 {
 	bool succ = parseQuery(node);
-	if (!succ) succ = parseInsert(node);
 	return succ;
 }
 
@@ -75,6 +100,61 @@ bool SyntaxTree::parseQuery(NODE*& node)
 	node == nullptr;
 	return false;
 
+}
+//
+// parseCondition - 解析where后面的条件语句
+//	condition -> relattr op relattr_or_value
+//
+void SyntaxTree::parseCondition(NODE*& node)
+{
+	bool succ = parseRelAttr(node);
+	NODE* rel_or_val;
+	if (succ) {
+		TokenPtr tk = peek(1);
+		Operator op;
+		switch (tk->type) {
+		case T_LT: discard(1); op = LT_OP; break;
+		case T_LE: discard(1); op = LE_OP; break;
+		case T_GT: discard(1); op = GT_OP; break;
+		case T_EQ: discard(1); op = EQ_OP; break;
+		case T_NE: discard(1); op = NE_OP; break;
+		default: op = NO_OP; break;
+		}
+		parseRelAttrOrValue(rel_or_val);
+		node = condition_node(node, op, rel_or_val);
+	}
+	std::cout << "Something wrong with the condition sentences." << endl;
+}
+//
+// parseValue - 解析值
+//	value -> T_STRING | T_INT | T_FLOAT
+//
+bool SyntaxTree::parseValue(NODE*& node)
+{
+	TokenPtr val = next();
+	switch (val->type) {
+	case T_STRING:
+		node = value_node(VARCAHR, val->content);
+		break;
+	case T_INT:
+	{
+		int v;
+		sscanf(val->content, "%d", &v);
+		node = value_node(INT, &v);
+		break;
+	}
+	case T_FLOAT:
+	{
+		float v;
+		sscanf(val->content, "%f", &v);
+		node = value_node(FLOAT, &v);
+		break;
+	}
+	default:
+		node = nullptr;
+		return false;
+	}
+	return true;
 }
 
 void SyntaxTree::parseNonmtSelectClause(NODE*& node)
@@ -116,6 +196,21 @@ void SyntaxTree::parseNonmtRelationList(NODE*& node)
 	return;
 
 }
+//
+// parseRelAttrOrValue - 解析属性或者值
+//
+void SyntaxTree::parseRelAttrOrValue(NODE*& node)
+{
+	if (parseRelAttr(node)) {
+		node = relattr_or_value_node(node, nullptr);
+	}
+	else if (parseValue(node)) {
+		node = relattr_or_value_node(nullptr, node);
+	}
+	else {
+		std::cout << "Something wrong with the relation attr or value." << endl;
+	}
+}
 
 void SyntaxTree::parseOptWhereClause(NODE*& node)
 {
@@ -128,12 +223,27 @@ void SyntaxTree::parseOptWhereClause(NODE*& node)
 	node == nullptr;
 }
 
+
+
+void SyntaxTree::parseNonmtCondList(NODE*& node)
+{
+	NODE* condlist, * cond;
+	parseCondition(cond);
+	TokenPtr ta = peek(1);
+	if (ta) {
+		if (ta->type == RW_AND) {
+			discard(1);
+			parseNonmtCondList(condlist);
+			node = prepend(cond, condlist);
+		}
+		else  node = list_node(cond);
+		return;
+	}
+	std::cout << "Something wrong with the condlist." << endl;
+}
+
 //
-// parseOptOrderByClause -解析order by语句
-//  opt_order_by_clause -> RW_ORDER RW_BY ordering_spec
-//						-> nothing
-//  ordering_spec -> relattr opt_asc_desc
-//	opt_asc_desc -> RW_DESC | RW_ASC
+// parseOptOrderByClause -解析order by语句	
 //
 void SyntaxTree::parseOptOrderByClause(NODE*& node)
 {
@@ -151,7 +261,7 @@ void SyntaxTree::parseOptOrderByClause(NODE*& node)
 			return;
 		}
 		ta = peek(1);
-		if (!ta)  goto {
+		if (!ta){
 			std::cout << "排序选项错误" << endl;
 			return;
 		}
@@ -168,6 +278,25 @@ void SyntaxTree::parseOptOrderByClause(NODE*& node)
 	node = orderattr_node(0, 0);
 	return;
 
+}
+
+NODE* newnode(NODEKIND kind)
+{
+	NODE* n;
+
+	/* if we've used up all of the nodes then error */
+	if (nodeptr == MAXNODE) {
+		fprintf(stderr, "out of memory\n");
+		exit(1);
+	}
+
+	/* get the next node */
+	n = nodepool + nodeptr;
+	++nodeptr;
+
+	/* initialize the `kind' field */
+	n->kind = kind;
+	return n;
 }
 
 //
@@ -195,6 +324,149 @@ void SyntaxTree::parseOptGroupByClause(NODE*& node)
 	return;
 }
 
+//
+// parseRelAttr - 解析表的属性
+//  relattr -> RW_STRING RW_DOT RW_STRING
+//			-> RW_STRING
+//
+bool SyntaxTree::parseRelAttr(NODE*& node)
+{
+	TokenPtr ta = next(), tb;
+	if (ta && ta->type == RW_STRING) {
+		tb = peek(1);
+		if (!tb) {
+			std::cout << "Something wrong with the relation attributions." << endl;
+			node = nullptr;
+			return false;
+		}
+		if (tb->type == RW_DOT) {
+			discard(1);
+			tb = next();
+			if (!tb || tb->type != RW_STRING) {
+				std::cout << "Something wrong with the relation attributions." << endl;
+				node = nullptr;
+				return false;
+			}
+			node = relattr_node(ta->content, tb->content);
+		}
+		else
+			node = relattr_node(nullptr, ta->content);
+		return true;
+	}
+
+}
+
+//
+// parseNonmtAggrelattrList - 解析属性列表
+//
+void SyntaxTree::parseNonmtAggrelattrList(NODE*& node)
+{
+	bool succ = parseAggrelattr(node);
+	TokenPtr t = peek(1);
+	if (t) {
+		if (t->type == RW_COMMA) {
+			discard(1);
+			NODE* attrlist;
+			parseNonmtAggrelattrList(attrlist);
+			node = prepend(node, attrlist);
+		}
+		else {
+			node = list_node(node);
+		}
+		return;
+	}
+	std::cout << "属性表存在问题" << endl;
+}
+
+// parseAggrelattr - 解析属性列表
+//	aggrelattr -> ammsc RW_LPAREN RW_STRING RW_DOT RW_STRING RW_RPAREN
+//				-> ammsc RW_LPAREN RW_STRING RW_RPAREN
+//				-> ammsc RW_LPAREN RW_STAR RW_RPAREN
+//				-> RW_STRING RW_DOT RW_STRING
+//				-> RW_STRING
+//  ammsc -> RW_AVG | RW_MAX | RW_MIN | RW_SUM | RW_COUNT;
+//
+bool SyntaxTree::parseAggrelattr(NODE*& node)
+{
+	TokenPtr ta = peek(1), tb, tc;
+	if (ta) {
+		if (ta->type != RW_STRING) {
+			discard(1);
+			AggFun fun;
+			switch (ta->type)
+			{
+			case RW_AVG: fun = AVG_F; break;
+			case RW_MAX: fun = MAX_F; break;
+			case RW_MIN: fun = MIN_F; break;
+			case RW_SUM: fun = SUM_F; break;
+			case RW_COUNT: fun = COUNT_F; break;
+			default:std::cout << "Something wrong with the function" << endl;return false;
+			}
+			ta = next();
+			if (!ta || ta->type != RW_LPAREN) {
+				std::cout << "Something wrong with the function" << endl; return false;
+			}
+			ta = next();
+			if (!ta){
+				std::cout << "Something wrong with the function" << endl; return false;
+			}
+			if (ta->type == RW_STAR) {
+				ta = next();
+				if (!ta || ta->type != RW_RPAREN) {
+					std::cout << "Something wrong with the function" << endl; return false;
+				}
+				node = aggrelattr_node(fun, NULL, (char*)"*");
+				return true;
+			}
+			if (ta->type != RW_STRING){
+				std::cout << "Something wrong with the function" << endl; return false;
+			}
+			tb = next();
+			if (!tb) {
+				std::cout << "Something wrong with the function" << endl; return false;
+			}
+			if (tb->type == RW_RPAREN) {
+				node = aggrelattr_node(fun, NULL, ta->content);
+				return true;
+			}
+			if (tb->type != RW_DOT) {
+				std::cout << "Something wrong with the function" << endl; return false;
+			}
+			tb = next();
+			if (!tb || tb->type != RW_STRING) {
+				std::cout << "Something wrong with the function" << endl; return false;
+			}
+			tc = next();
+			if (!tc || tc->type != RW_RPAREN) {
+				std::cout << "Something wrong with the function" << endl; return false;
+			}
+			node = aggrelattr_node(fun, ta->content, tb->content);
+		}
+		else {
+			discard(1);
+			tb = peek(1);
+			if (!tb) {
+				std::cout << "Something wrong with the function" << endl;
+				return false;
+			}
+			if (tb->type != RW_DOT) {
+				node = aggrelattr_node(NO_F, nullptr, ta->content);
+				return true;
+			}
+			else {
+				discard(1); /* 消耗掉RW_DOT */
+				tb = next();
+				if (!tb || tb->type != RW_STRING) {
+					std::cout << "Something wrong with the function" << endl;
+					return false;
+				}
+				node = aggrelattr_node(NO_F, ta->content, tb->content);
+				return true;
+			}
+		}
+	}
+}
+
 NODE* query_node(NODE* relattrlist, NODE* rellist, NODE* conditionlist,
 	NODE* order_relattr, NODE* group_relattr)
 {
@@ -218,6 +490,33 @@ NODE* aggrelattr_node(AggFun a, char* relname, char* attrname) {
 	return n;
 }
 
+NODE* condition_node(NODE* lhsRelattr, Operator op, NODE* rhsRelattrOrValue)
+{
+	NODE* n = newnode(N_CONDITION);
+
+	n->u.CONDITION.lhsRelattr = lhsRelattr;
+	n->u.CONDITION.op = op;
+	n->u.CONDITION.rhsRelattr =
+		rhsRelattrOrValue->u.RELATTR_OR_VALUE.relattr;
+	n->u.CONDITION.rhsValue =
+		rhsRelattrOrValue->u.RELATTR_OR_VALUE.value;
+	return n;
+}
+
+/*
+* relattr_or_valuenode: allocates, initializes, and returns a pointer to
+* a new relattr_or_value node having the indicated values.
+*/
+NODE* relattr_or_value_node(NODE* relattr, NODE* value)
+{
+	NODE* n = newnode(N_RELATTR_OR_VALUE);
+
+	n->u.RELATTR_OR_VALUE.relattr = relattr;
+	n->u.RELATTR_OR_VALUE.value = value;
+	return n;
+}
+
+
 
 NODE* relation_node(char* relname)
 {
@@ -236,8 +535,82 @@ NODE* attrtype_node(char* attrname, char* type)
 	return n;
 }
 
+NODE* orderattr_node(int order, NODE* relattr)
+{
+	NODE* n = newnode(N_ORDERATTR);
+
+	n->u.ORDERATTR.order = order;
+	n->u.ORDERATTR.relattr = relattr;
+	return n;
+}
+
+/*
+* list_node: allocates, initializes, and returns a pointer to a new
+* list node having the indicated values.
+*/
+NODE* list_node(NODE* n)
+{
+	NODE* list = newnode(N_LIST);
+
+	list->u.LIST.curr = n;
+	list->u.LIST.next = NULL;
+	return list;
+}
+/*
+* value_node: allocates, initializes, and returns a pointer to a new
+* value node having the indicated values.
+*/
+NODE* value_node(AttrType type, void* value)
+{
+	NODE* n = newnode(N_VALUE);
+
+	n->u.VALUE.type = type;
+	switch (type) {
+	case INT:
+		n->u.VALUE.ival = *(int*)value;
+		break;
+	case FLOAT:
+		n->u.VALUE.rval = *(float*)value;
+		break;
+	case VARCAHR:
+		n->u.VALUE.sval = (char*)value;
+		break;
+	}
+	return n;
+}
+
+/*
+* prepends node n onto the front of list.
+*
+* Returns the resulting list.
+*/
+NODE* prepend(NODE* n, NODE* list)
+{
+	NODE* newlist = newnode(N_LIST);
+
+	newlist->u.LIST.curr = n;
+	newlist->u.LIST.next = list;
+	return newlist;
+}
+
+/*
+* relattr_node: allocates, initializes, and returns a pointer to a new
+* relattr node having the indicated values.
+*/
+NODE* relattr_node(char* relname, char* attrname)
+{
+	NODE* n = newnode(N_RELATTR);
+
+	n->u.RELATTR.relname = relname;
+	n->u.RELATTR.attrname = attrname;
+	return n;
+}
+
 void reset_parser(void)
 {
 	reset_scanner();
 	nodeptr = 0;
 }
+
+
+

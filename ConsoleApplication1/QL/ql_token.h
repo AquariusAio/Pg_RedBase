@@ -62,6 +62,8 @@ enum TOKENKIND {
 	RW_DOT,
 };
 string tokenName(TOKENKIND type);
+void reset_scanner(void);
+
 
 //
 // Token 词法分析器每次会吐出一个词法单元,即token

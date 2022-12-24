@@ -3,7 +3,7 @@
 
 NODE* parse_tree;
 namespace QL {
-	void Parser() {
+	void Parse() {
 		string buffer;
 		LexerPtr lexer = Lexer::instance();
 		SyntaxTree tree(lexer);

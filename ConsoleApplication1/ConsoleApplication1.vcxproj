@@ -88,7 +88,7 @@
     <ClCompile Include="PF\headfile\pf_operator.cpp" />
     <ClCompile Include="PF\headfile\pf_pagehandle.cpp" />
     <ClCompile Include="PF\headfile\util.cpp" />
-    <ClCompile Include="QL\qi_token.cpp" />
+    <ClCompile Include="QL\ql_token.cpp" />
     <ClCompile Include="QL\ql_lexer.cpp" />
     <ClCompile Include="QL\ql_operator.cpp" />
     <ClCompile Include="QL\ql_syntax.cpp" />

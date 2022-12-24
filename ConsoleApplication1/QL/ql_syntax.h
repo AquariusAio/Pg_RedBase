@@ -172,6 +172,20 @@ typedef struct node {
 	} u;
 }NODE;
 
+NODE* newnode(NODEKIND kind);
+NODE* query_node(NODE* relattrlist, NODE* rellist, NODE* conditionlist, NODE* order_relattr, NODE* group_relattr);
+NODE* aggrelattr_node(AggFun a, char* relname, char* attrname);
+NODE* relation_node(char* relname);
+NODE* attrtype_node(char* attrname, char* type);
+NODE* orderattr_node(int order, NODE* relattr);
+NODE* relattr_node(char* relname, char* attrname);
+NODE* relattr_or_value_node(NODE* relattr, NODE* value);
+NODE* list_node(NODE* n);
+NODE* prepend(NODE* n, NODE* list);
+NODE* value_node(AttrType type, void* value);
+NODE* condition_node(NODE* lhsRelattr, Operator op, NODE* rhsRelattrOrValue);
+void reset_parser(void);
+
 
 class SyntaxTree {
 public:
@@ -187,32 +201,23 @@ public:
 	}
 	NODE* buildSyntaxTree();
 private:
-	bool parseCommand(NODE*&);
-	bool parseUtility(NODE*&);
 	bool parseDML(NODE*&);
-	bool parseCreateTable(NODE*&);
-	bool parseCreateIndex(NODE*&);
-	bool parseInsert(NODE*&);
 	bool parseQuery(NODE*&);
-	bool parseDropTable(NODE*&);
-	bool parseDropIndex(NODE*&);
-	bool parseNonmtAttrtypeList(NODE*&);
+	bool parseRelAttr(NODE*&);
+	void parseCondition(NODE*&);
+	bool parseValue(NODE*&);
+
+	bool parseAggrelattr(NODE*&);
 	void parseNonmtSelectClause(NODE*&);
-	void parseNonmtAggrelattrList(NODE*&);
 	void parseNonmtRelationList(NODE*&);
 	void parseNonmtCondList(NODE*&);
-	bool parseAggrelattr(NODE*&);
-	bool parseNonmtValueList(NODE*&);
-	bool parseValue(NODE*&);
-	bool parseAttrtype(NODE*&);
-	bool parseRelAttr(NODE*&);
-
+	
+	void parseRelAttrOrValue(NODE*&);
 	void parseOptWhereClause(NODE*&);
 	void parseOptOrderByClause(NODE*&);
 	void parseOptGroupByClause(NODE*&);
+	void parseNonmtAggrelattrList(NODE*&);
 
-	void parseCondition(NODE*&);
-	void parseRelAttrOrValue(NODE*&);
 private:
 	TokenPtr next();
 	TokenPtr peek(int pos);
@@ -222,8 +227,3 @@ private:
 	deque<TokenPtr> tokens_; /* ÓÃÓÚ¼ÇÂ¼Token */
 };
 
-NODE* query_node(NODE* relattrlist, NODE* rellist, NODE* conditionlist,NODE* order_relattr, NODE* group_relattr);
-NODE* aggrelattr_node(AggFun a, char* relname, char* attrname);
-NODE* relation_node(char* relname);
-NODE* attrtype_node(char* attrname, char* type);
-void reset_parser(void);

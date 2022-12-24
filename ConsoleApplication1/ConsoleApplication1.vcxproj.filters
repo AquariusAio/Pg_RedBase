@@ -20,7 +20,7 @@
     <ClCompile Include="RM\rm_filescan.cpp" />
     <ClCompile Include="IX\IX_filescan.cpp" />
     <ClCompile Include="QL\ql_lexer.cpp" />
-    <ClCompile Include="QL\qi_token.cpp" />
+    <ClCompile Include="QL\ql_token.cpp" />
     <ClCompile Include="QL\ql_syntax.cpp" />
     <ClCompile Include="QL\ql_operator.cpp" />
   </ItemGroup>
