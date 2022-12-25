@@ -185,7 +185,11 @@ NODE* prepend(NODE* n, NODE* list);
 NODE* value_node(AttrType type, void* value);
 NODE* condition_node(NODE* lhsRelattr, Operator op, NODE* rhsRelattrOrValue);
 void reset_parser(void);
-
+int mk_conditions(NODE* list, int max, Condition conditions[]);
+static int mk_relations(NODE* list, int max, char* relations[]);
+static int mk_agg_rel_attrs(NODE* list, int max, AggRelAttr relAttrs[]);
+static void mk_order_relattr(NODE* node, int& order, RelAttr& relAttr);
+static void mk_rel_attr(NODE* node, RelAttr& relAttr);
 
 class SyntaxTree {
 public:

@@ -4,6 +4,14 @@
 #define REL_NAME_LEM 20
 #define ATTR_NAME_LEN 20
 
+enum AttrType
+{
+	INT,
+	FLOAT,
+	CHAR,
+	VARCAHR
+
+};
 
 struct Relation {
 	char relname[REL_NAME_LEM];//关系名称
@@ -13,13 +21,10 @@ struct Relation {
 };
 #define REL_LEN sizeof(Relation);
 
-enum AttrType
-{
-	INT,
-	FLOAT,
-	CHAR,
-	VARCAHR
-
+struct RelationData {
+	char relname[REL_NAME_LEM];
+	unsigned blocks;   //关系所占的块数
+	unsigned rcds;     //关系的记录总数
 };
 
 struct Attributes {
@@ -32,8 +37,9 @@ struct Attributes {
 	int attrlen;              //记录长度
 };
 
-struct RelCreation {
-	void* data;
-	AttrType type;
-	int len;
+
+struct IndexData {
+	char attrname[ATTR_NAME_LEN];
+	char rename[REL_NAME_LEM];
+	unsigned height;			//树的高度
 };

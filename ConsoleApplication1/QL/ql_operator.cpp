@@ -17,5 +17,4 @@ namespace QL {
 		parse_tree = tree.buildSyntaxTree();
 		std::cout << "Syntax Tree" << endl;
 	}
-	
 }

@@ -14,11 +14,19 @@ enum AggFun {
 	SUM_F, AVG_F
 };
 
+//排序函数
+enum Order
+{
+	INC,DEC
+};
+
 //谓词
 class QLComp;
 struct RelAttr {
 	char* relname;
 	char* attrname;
+	bool indexable;
+	int offset;
 	//friend std::ostream& operator<<(std::ostream& s, const RelAttr& ra);
 };
 
@@ -39,3 +47,16 @@ public:
 public:
 	bool operate();
 };
+
+//聚类函数
+struct AggRelAttr {
+	AggFun func;
+	char* relname;  /* 表名 */
+	char* attrname; /* 属性名 */
+	friend std::ostream& operator<<(std::ostream& s, const AggRelAttr& ra);
+};
+
+
+
+
+

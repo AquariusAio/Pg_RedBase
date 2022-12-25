@@ -7,6 +7,11 @@
 static NODE nodepool[MAXNODE];
 static int nodeptr = 0;
 
+void reset_parser(void)
+{
+	reset_scanner();
+	nodeptr = 0;
+}
 //
 // next - 获取下一个token
 // 
@@ -605,11 +610,83 @@ NODE* relattr_node(char* relname, char* attrname)
 	return n;
 }
 
-void reset_parser(void)
+
+static int mk_agg_rel_attrs(NODE* list, int max, AggRelAttr relAttrs[])
 {
-	reset_scanner();
-	nodeptr = 0;
+	int i;
+
+	/* For each element of the list... */
+	for (i = 0; list != NULL; ++i, list = list->u.LIST.next) {
+		/* If the list is too long then error */
+		if (i == max)
+			return E_TOOMANY;
+
+		mk_agg_rel_attr(list->u.LIST.curr, relAttrs[i]);
+	}
+
+	return i;
 }
 
+static int mk_relations(NODE* list, int max, char* relations[])
+{
+	int i;
+	NODE* current;
 
+	/* for each element of the list... */
+	for (i = 0; list != NULL; ++i, list = list->u.LIST.next) {
+		/* If the list is too long then error */
+		if (i == max)
+			return E_TOOMANY;
 
+		current = list->u.LIST.curr;
+		relations[i] = current->u.RELATION.relname;
+	}
+
+	return i;
+}
+
+static int mk_conditions(NODE* list, int max, Condition conditions[])
+{
+	int i;
+	NODE* current;
+
+	/* for each element of the list... */
+	for (i = 0; list != NULL; ++i, list = list->u.LIST.next) {
+		/* If the list is too long then error */
+		if (i == max)
+			return E_TOOMANY;
+
+		current = list->u.LIST.curr;
+		/* 条件构成 -> relname.attrname op relname.attrname */
+		conditions[i].lhsAttr.relname =
+			current->u.CONDITION.lhsRelattr->u.RELATTR.relname;
+		conditions[i].lhsAttr.attrname =
+			current->u.CONDITION.lhsRelattr->u.RELATTR.attrname;
+		conditions[i].op = current->u.CONDITION.op;
+		if (current->u.CONDITION.rhsRelattr) { /* 右操作数也是属性 */
+			conditions[i].bRhsIsAttr = true;
+			conditions[i].rhsAttr.relname =
+				current->u.CONDITION.rhsRelattr->u.RELATTR.relname;
+			conditions[i].rhsAttr.attrname =
+				current->u.CONDITION.rhsRelattr->u.RELATTR.attrname;
+		}
+		else { /* 右操作数是值 */
+			conditions[i].bRhsIsAttr = false;
+			mk_value(current->u.CONDITION.rhsValue, conditions[i].rhsValue);
+		}
+	}
+	return i;
+}
+
+static void mk_order_relattr(NODE* node, int& order, RelAttr& relAttr)
+{
+	order = node->u.ORDERATTR.order;
+	if (order != 0)
+		mk_rel_attr(node->u.ORDERATTR.relattr, relAttr);
+}
+
+static void mk_rel_attr(NODE* node, RelAttr& relAttr)
+{
+	relAttr.relname = node->u.RELATTR.relname;
+	relAttr.attrname = node->u.RELATTR.attrname;
+}
