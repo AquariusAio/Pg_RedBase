@@ -16,13 +16,12 @@ PfBuffer* pfBuffer = PfBuffer::instance();
 int main()
 {
 
-    printf("%s 向你问好!\n", "ConsoleApplication1");
     QL::Parse();
     return 0;
 }
 
 /*
-*   //实验1测试代码
+    //实验1测试代码
     RmFileHdl file;
     CreateFile("account");
     OpenFile("account", file);

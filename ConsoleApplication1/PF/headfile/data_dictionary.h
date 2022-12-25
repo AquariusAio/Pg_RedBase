@@ -27,6 +27,7 @@ struct Attributes {
 	char rename[REL_NAME_LEM];
 	AttrType type;            //属性类型
 	bool flexible;            //是否可边长
+	bool indexable;			  //判断是否有索引
 	int offset;               //记录内偏移
 	int attrlen;              //记录长度
 };

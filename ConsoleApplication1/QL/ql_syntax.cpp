@@ -42,7 +42,6 @@ NODE* SyntaxTree::buildSyntaxTree()
 		TokenPtr ta = next();
 		if (ta->type == RW_SEMICOLON)
 		{
-			std::cout << "SQLÓï¾äÓ¦ÒÔ;½áÎ²" << endl;
 			return node;
 		}
 	}

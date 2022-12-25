@@ -23,6 +23,9 @@
     <ClCompile Include="QL\ql_token.cpp" />
     <ClCompile Include="QL\ql_syntax.cpp" />
     <ClCompile Include="QL\ql_operator.cpp" />
+    <ClCompile Include="QL\ql_optimizer.cpp" />
+    <ClCompile Include="QL\ql_comp.cpp" />
+    <ClCompile Include="QL\ql_execNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="头文件">
@@ -86,5 +89,8 @@
     <ClInclude Include="QL\ql_syntax.h" />
     <ClInclude Include="QL\ql_operator.h" />
     <ClInclude Include="QL\ql_head.h" />
+    <ClInclude Include="QL\ql_optimizer.h" />
+    <ClInclude Include="QL\ql_comp.h" />
+    <ClInclude Include="QL\ql_execNode.h" />
   </ItemGroup>
 </Project>

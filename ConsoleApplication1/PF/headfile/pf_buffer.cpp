@@ -12,6 +12,22 @@ using namespace std;
 using namespace RedBase;
 PfBuffer* PfBuffer::instance_ = nullptr;
 
+PfBuffer::PfBuffer() {
+	/*
+	std::cout << "12880 81920 4096" << endl;
+	int i;
+	for (i = 0; i < 20; i++) {
+		nodes_[i].type = DATA;
+		std::cout << "BufferBlock DATA" << endl;
+	}
+	i = 29;
+	nodes_[i + 1].type = LOG;
+	std::cout << "BufferBlock LOG" << endl;
+	nodes_[i + 2].type = DIC;
+	std::cout << "BufferBlock DIC" << endl;
+	*/
+}
+
 RC PfBuffer::allocatePage(int fd, Page num, PageBuffer& addr)
 {
 	int idx = table_.search(fd, num);
@@ -27,7 +43,7 @@ RC PfBuffer::allocatePage(int fd, Page num, PageBuffer& addr)
 		nodes_[idx].num = num;
 		nodes_[idx].count = 1;
 		nodes_[idx].dirty = false;
-		//table_.insert(fd, num, idx);
+		table_.insert(fd, num, idx);
 	}
 	addr = nodes_[idx].buffer;
 	return 0;
@@ -94,9 +110,6 @@ RC PfBuffer::readPage(int fd, Page num, PageBuffer dst)
 }
 
 
-//
-// writeBack - 将src处的内容写回到磁盘
-// 
 RC PfBuffer::writeBack(int fd, Page num, PageBuffer src)
 {
 	// 这里的页面计数,从文件头部之后开始
@@ -114,6 +127,7 @@ void PfBuffer::countDec(int fd, Page num) {
 	int idx = table_.search(fd, num);
 	if (idx >= 0 && nodes_[idx].fd == fd) {
 		nodes_[idx].count-=1;
+		if (nodes_[idx].count == 0) table_.remove(nodes_[idx].fd, nodes_[idx].num);
 	}
 }
 
@@ -153,7 +167,7 @@ int PfBuffer::closeFile(int fd) {
 		if (nodes_[i].fd == fd) {
 			writeBack(nodes_[i].fd, nodes_[i].num, nodes_[i].buffer);
 			nodes_[i].dirty = false;
-			//table_.remove(fd,nodes_[i].num);
+			table_.remove(fd,nodes_[i].num);
 		}
 	}
 	return 0;

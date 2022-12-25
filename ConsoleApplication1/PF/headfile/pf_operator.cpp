@@ -1,4 +1,5 @@
 #include "pf_operator.h"
+#include<iostream>
 using namespace RedBase;
 
 int OpenFile(const char* pathname, RmFileHdl& rmfile) {
@@ -28,9 +29,6 @@ int CreateFile(const char *filename ) {
 	fileHead->pageNum = PF_MEM_BLOCKS;
 
 	int n = Write(fd, fileHead, sizeof(PfFileHeader));
-	if (n != PF_PAGE_SIZE) {
-		printf("文件创建失败");
-	}
 	/*初始化所有页的头部信息*/
 	PageIni(filename,fd);
 	return 0;
@@ -46,10 +44,10 @@ void PageIni(const char* filename,int fd) {
 	char headPage[PF_PAGE_SIZE];
 	memset(headPage, -1, PF_PAGE_SIZE);
 	RmFileDataPtr headData = (RmFileDataPtr)headPage;
-
+	std::cout.flush();
 	for (int i = 0; i < PF_MEM_BLOCKS; i++) {
 		headData[i].next = i+1;
-		printf("PageIni %d\n", headData[i].next);
+		std::cout << "PageIni " << headData[i].next << endl;
 	}
 	Write(fd,headData, PF_PAGE_SIZE);
 

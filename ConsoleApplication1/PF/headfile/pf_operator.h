@@ -14,8 +14,8 @@
 #define _O_EXCL        0x0400  // open only if file doesn't already exist
 #define CREATION_MASK		0600		// r/w privileges to owner only
 
-
+void DbIni(DBConfig);
+void PageIni(const char*, int);
 int OpenFile(const char * pathfile,RmFileHdl& file);//打开一个文件
-int CreateFile(const char*);//创建一个文件
-void PageIni(const char*,int);
+int CreateFile(const char*);//创建一个表
 void CloseFile(RmFileHdl& rmfile);

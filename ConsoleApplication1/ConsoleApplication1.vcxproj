@@ -88,6 +88,9 @@
     <ClCompile Include="PF\headfile\pf_operator.cpp" />
     <ClCompile Include="PF\headfile\pf_pagehandle.cpp" />
     <ClCompile Include="PF\headfile\util.cpp" />
+    <ClCompile Include="QL\ql_comp.cpp" />
+    <ClCompile Include="QL\ql_execNode.cpp" />
+    <ClCompile Include="QL\ql_optimizer.cpp" />
     <ClCompile Include="QL\ql_token.cpp" />
     <ClCompile Include="QL\ql_lexer.cpp" />
     <ClCompile Include="QL\ql_operator.cpp" />
@@ -114,9 +117,12 @@
     <ClInclude Include="PF\headfile\pf_pageheader.h" />
     <ClInclude Include="PF\headfile\pf_operator.h" />
     <ClInclude Include="PF\headfile\util.h" />
+    <ClInclude Include="QL\ql_comp.h" />
+    <ClInclude Include="QL\ql_execNode.h" />
     <ClInclude Include="QL\ql_head.h" />
     <ClInclude Include="QL\ql_lexer.h" />
     <ClInclude Include="QL\ql_operator.h" />
+    <ClInclude Include="QL\ql_optimizer.h" />
     <ClInclude Include="QL\ql_syntax.h" />
     <ClInclude Include="QL\ql_token.h" />
     <ClInclude Include="RM\rm_filescan.h" />
