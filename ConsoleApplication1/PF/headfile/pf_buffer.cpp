@@ -12,10 +12,6 @@ using namespace std;
 using namespace RedBase;
 PfBuffer* PfBuffer::instance_ = nullptr;
 
-//add
-
-
-
 PfBuffer::PfBuffer() {
 	/*
 	std::cout << "12880 81920 4096" << endl;
@@ -131,10 +127,7 @@ void PfBuffer::countDec(int fd, Page num) {
 	int idx = table_.search(fd, num);
 	if (idx >= 0 && nodes_[idx].fd == fd) {
 		nodes_[idx].count-=1;
-<<<<<<< HEAD
-=======
 		if (nodes_[idx].count == 0) table_.remove(nodes_[idx].fd, nodes_[idx].num);
->>>>>>> 60cbca0cbdb56ee0d74cb32dab85759eb9f31837
 	}
 }
 
